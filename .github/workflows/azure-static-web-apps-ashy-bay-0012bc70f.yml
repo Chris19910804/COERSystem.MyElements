@@ -33,9 +33,6 @@ jobs:
       - name: Build library
         run: npm run build:lib
       
-      - name: Build styles
-        run: sass --no-source-map projects/coer-elements/styles/index.scss ./dist/coer-elements/styles/coer-elements.css
-      
       - name: Build documentation
         run: npm run build
       
