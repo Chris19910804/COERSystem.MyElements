@@ -25,13 +25,7 @@ jobs:
           lfs: false
       
       - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
-
-      - name: Install SASS
-        run: npm install -g node-sass
-      
-      - name: Build library
-        run: npm run build:lib
+        run: npm install @actions/core@1.6.0 @actions/http-client 
       
       - name: Build documentation
         run: npm run build
