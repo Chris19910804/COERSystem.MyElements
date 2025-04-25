@@ -128,7 +128,8 @@
               "buildTarget": "coer-elements-documentation:build:production"
             },
             "development": {
-              "buildTarget": "coer-elements-documentation:build:development"
+              "buildTarget": "coer-elements-documentation:build:development",
+              "hmr": false
             }
           },
           "defaultConfiguration": "development"
