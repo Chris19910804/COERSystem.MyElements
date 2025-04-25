@@ -17,7 +17,7 @@ const appSettings = {
         }
     }, 
     login: {
-        staticLogin: false
+        staticLogin: true
     },
     navigation: {
         staticMenu: true
