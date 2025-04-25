@@ -1,0 +1,73 @@
+<section class="coer-container">  
+    <!-- Search -->
+    <coer-textbox
+        label="Search"
+        [showSearchIcon]="true"
+        [showClearIcon]="true"
+        width="250px"
+        marginLeft="auto" 
+        [isInvisible]="!_showSearch()"
+        [ngModel]="_search()" 
+        (ngModelChange)="_search.set('' + $event)"
+    ></coer-textbox>    
+
+    <coer-button
+        color='primary'
+        type="icon"  
+        [icon]="(_show() == 'Information') ? 'fa-solid fa-flask' : 'fa-solid fa-book'"
+        [tooltip]="(_show() == 'Information') ? 'Tests' : 'Information'"
+        (onClick)="(_show() == 'Information') ? _show.set('Tests') : _show.set('Information')"  
+    > Click </coer-button>
+</section>
+    
+<!-- Information -->
+@if(_show() === 'Information') {
+    <documentation-information 
+        #informationInputs 
+        type="Inputs"     
+        [information]="_inputs()"     
+        (onOpenAccordion)="_OpenAccorddion($event)"
+    ></documentation-information> 
+
+    <documentation-information 
+        #informationEvents 
+        type="Events"     
+        [information]="_events()"     
+        (onOpenAccordion)="_OpenAccorddion($event)">
+    </documentation-information>
+    
+    <documentation-information 
+        #informationFunctions 
+        type="Functions"  
+        [information]="_functions()"  
+        (onOpenAccordion)="_OpenAccorddion($event)"
+    ></documentation-information>
+    
+    <documentation-information 
+        #informationProperties 
+        type="Properties" 
+        [information]="_properties()" 
+        (onOpenAccordion)="_OpenAccorddion($event)"
+    ></documentation-information>
+}
+
+<!-- Tests -->
+@if(_show() === 'Tests') {
+    <documentation-tests [component]="component()" [inputs]="_inputs()"></documentation-tests>
+}
+
+<div class="pt-3"></div>
+
+<!-- Quick Implement -->
+<coer-modal #modalQuickImplement title="Quick Implement" icon="" width="auto"> 
+    <pre>{{ quickImplement() }}</pre> 
+
+    <ng-template coerRef="footer">
+        <coer-button 
+            color="dark"
+            icon="bi bi-clipboard-fill" 
+            iconPosition="right"
+            (onClick)="Copy()"
+        > Copy </coer-button>
+    </ng-template>
+</coer-modal>  

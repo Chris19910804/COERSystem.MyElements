@@ -1,0 +1,62 @@
+<div class="row coer-container">  
+    <!-- Properties -->
+    <section class="col-6 coer-container">
+        <div class="flex-wrap-left">
+            @for(item of inputs(); track item.input; let index = $index) {
+                <div class="property-container">
+                    <span [ngClass]="{
+                        'property-name': true,
+                        'text-primary-bold': IsNotOnlyWhiteSpace(item.default)
+                    }"> {{ item.input }} </span> 
+
+                    @switch(item.component) {
+                        @case ('TextBox') {
+                            <coer-textbox 
+                                lifeCycle
+                                [id]="'TextBox-' + index"
+                                width="200px" 
+                                (onInput)="_SetInput(item, $event, 'TextBox')"
+                                (afterViewInit)="_SetDefaultValue(item, 'TextBox-' + index)"
+                            ></coer-textbox>
+                        }
+
+                        @case ('Dropdown') {
+                            <coer-dropdown 
+                                lifeCycle
+                                [id]="'Dropdown-' + index"
+                                color='secondary'
+                                type="outline"
+                                width="200px"
+                                [dataSource]="_GetDataSource(item)"  
+                                (onSelected)="_SetInput(item, $event.name, 'Dropdown')" 
+                                (onUnselect)="_SetInput(item, '', 'Dropdown')" 
+                                (afterViewInit)="_SetDefaultValue(item, 'Dropdown-' + index)" 
+                            ></coer-dropdown>
+                        } 
+
+                        @case ('Switch') {
+                            <coer-switch
+                                lifeCycle
+                                [id]="'Switch-' + index"                               
+                                (onChange)="_SetInput(item, $event, 'Switch')"
+                                (afterViewInit)="_SetDefaultValue(item, 'Switch-' + index)"
+                            ></coer-switch>
+                        }
+
+                        <!-- @case ('BUTTON') {
+                            
+                        } -->
+                    }
+                </div>
+            }
+        </div>
+    </section>
+    
+    
+    <!-- Component -->
+    <section class="col-6 coer-container">
+        <div class="flex-middle-center">
+            <div #container><ng-template></ng-template></div>
+        </div> 
+    </section>
+</div>

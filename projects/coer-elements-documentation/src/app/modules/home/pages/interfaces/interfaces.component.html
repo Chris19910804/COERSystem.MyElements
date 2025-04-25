@@ -1,0 +1,22 @@
+<!-- Title -->
+<coer-page-title
+    title="Interfaces"
+    [breadcrumbs]="breadcrumbs"
+    [goBack]="goBack" 
+></coer-page-title>   
+ 
+<section class="coer-container-tab mb-3">
+    <coer-tab #coerTab minHeight="350px" (onSelectedTab)="null">        
+        @for(tab of _tabList; track tab) { 
+            <ng-template [coerRef]="tab">                 
+                @for(_interface of GetInterfaces(tab); track _interface.name) {                 
+                    <div class="accordion">
+                        <coer-accordion [title]='_interface.name' [scrollOnOpen]="true" [expanded]="false" (onOpen)="Open(_interface.name)">
+                            <pre>{{ _interface.content }}</pre>
+                        </coer-accordion>  
+                    </div>               
+                }
+            </ng-template>
+        }        
+    </coer-tab>
+</section>  

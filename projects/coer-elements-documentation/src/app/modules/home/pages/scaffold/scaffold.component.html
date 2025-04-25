@@ -1,0 +1,76 @@
+<!-- Title -->
+<coer-page-title
+    title="Scaffold"
+    [breadcrumbs]="breadcrumbs"
+    [goBack]="goBack"
+    [information]="{ show: !isLoading, tooltip: 'Download' }"
+    (onClickInformation)="Download()"
+></coer-page-title>
+
+ 
+@for(scaffold of sacaffoldList; track scaffold.name) {
+    <section class="coer-container">
+        <h6> 
+            <span> {{ scaffold.name }} </span>  
+            <coer-button
+                color="navigation"
+                type='icon-no-border'
+                icon="bi bi-clipboard-fill"
+                tooltip="Copy script"
+                (onClick)="Copy(scaffold)"
+            ></coer-button>
+        </h6> 
+
+        <div class="row">
+            <div class="col-xs-12 col-lg-6 col-xxl-5">
+                <table class="table table-sm table-bordered table-responsive">
+                    <tbody>
+                        <tr>
+                            <td> -Provider </td>
+                            <td> {{ scaffold.provider }} </td>
+                        </tr>
+
+                        <tr>
+                            <td> -StartupProject </td>
+                            <td> {{ scaffold.apiName }} </td>
+                        </tr>
+        
+                        <tr>
+                            <td> -Project </td>
+                            <td> {{ scaffold.project }} </td>
+                        </tr>
+        
+                        <tr>
+                            <td> -Namespace </td>
+                            <td> {{ scaffold.namespace }} </td>
+                        </tr>
+        
+                        <tr>
+                            <td> -OutputDir </td>
+                            <td> {{ scaffold.output }} </td>
+                        </tr>
+        
+                        <tr>
+                            <td> -Context </td>
+                            <td> {{ scaffold.contextName }} </td>
+                        </tr>
+        
+                        <tr>
+                            <td> -ContextNamespace </td>
+                            <td> {{ scaffold.contextNamespace }} </td>
+                        </tr>
+        
+                        <tr>
+                            <td> -ContextDir </td>
+                            <td> {{ scaffold.contextOutput }} </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-xs-12 col-lg-6 col-xxl-7 mt-2 mt-lg-0"> 
+                <div class="scaffold-string"> {{ GetScaffoldString(scaffold) }} </div> 
+            </div>         
+        </div>            
+    </section>
+}

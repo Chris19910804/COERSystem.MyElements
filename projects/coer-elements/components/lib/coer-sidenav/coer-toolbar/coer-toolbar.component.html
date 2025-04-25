@@ -1,0 +1,63 @@
+<div id="coer-tool-bar" [ngClass]="{ 'position-relative': _isModalOpen() }">
+    <mat-toolbar> 
+        @if(showLogo) {
+            <div class="logo-image-container" (click)="ToogleSideNave()" [ngStyle]="{ 'width': appLogoWidth }">
+                <div class="logo-image" [ngStyle]="{ 'background-image': 'url(' + (appLogoPath | noImage:'IMAGE') + ')' }"></div>
+            </div>
+        }
+
+        @else {
+            <div class="button-container">
+                <coer-button
+                    type="icon-no-border"
+                    icon="menu"
+                    color="navigation"
+                    [isLoading]="isLoading"
+                    (onClick)="ToogleSideNave()"
+                ></coer-button>
+            </div>
+
+            <span class="app-name"> {{ appName }} </span> 
+        } 
+
+        <span class="fill-space"></span> 
+         
+        <div class="user-container" (click)="dropdown.Open()" [ngStyle]="{ 
+            'padding-right': GetPadding('user-container'),
+            'display': showUser ? 'flex' : 'none'
+            }">
+            
+            <coer-dropdown
+                #dropdown
+                [dataSource]="menu()"  
+                propDisplay="label" 
+                width="auto"
+                [minWidth]="GetElementWidth(toolbarUserIdentity)"
+                maxWidth="auto"
+                (onSelected)="onClickOption.emit($event); dropdown.Unselect()"
+            ></coer-dropdown>
+
+            <div class="user-image" [ngStyle]="{ 'background-image': 'url(' + (image() | noImage:'USER') + ')' }"></div>
+            <div #toolbarUserIdentity id="toolbar-user-identity" class="user-identity" [ngStyle]="{ 'padding-left': GetPadding('user-identity') }">
+                
+                @if(userName().length > 0) {
+                    <p> {{ userName() }} </p>
+                }
+    
+                @if(userTitle().length > 0) {
+                    <p> {{ userTitle() }} </p>
+                }
+            </div> 
+        </div>  
+        
+        @if(!showUser) {
+            <span class="me-2">
+                <span class="fw-bold fa-fade"> 
+                    Loading <i class="fa-solid fa-sync fa-spin"></i> 
+                </span>                
+            </span>
+        }
+    </mat-toolbar>
+
+    <div class="shadow"></div>
+</div>

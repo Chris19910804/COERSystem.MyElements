@@ -1,0 +1,118 @@
+:root {
+    //Fixed colors
+    --blue:  #0d6efd;
+    --gray:  #6c757d;
+    --green: #198754;
+    --yellow:#ffc107;
+    --red:   #dc3545;
+    --smoke: #f5f5f5;
+    --black: #252525;    
+    --orange:#fd6031; 
+    --white: #ffffff; 
+    --purple:#a615bc; 
+
+    //Action Colors
+    --primary-inner:     var(--primary,     var(--orange));
+    --secondary-inner:   var(--secondary,   var(--gray));
+    --success-inner:     var(--success,     var(--green));
+    --warning-inner:     var(--warning,     var(--yellow));
+    --danger-inner:      var(--danger,      var(--red));
+    --navigation-inner:  var(--navigation,  var(--orange));
+    --information-inner: var(--information, var(--blue));
+    
+    //App Colors
+    --breadcrumbs-inner: var(--app-breadcrumbs, var(--blue)); 
+    --background-inner:  var(--app-background,  var(--smoke));
+    --containers-inner:  var(--app-containers,  var(--white));
+   
+    //Sidenav
+    --sidenav-inner:        var(--app-sidenav,        var(--black));
+    --sidenav-text-inner:   var(--app-sidenav-text,   var(--smoke));
+    --sidenav-active-inner: var(--app-sidenav-active, var(--orange));
+   
+    //Toolbar
+    --toolbar-inner:      var(--app-toolbar,      var(--smoke));
+    --toolbar-text-inner: var(--app-toolbar-text, var(--black));
+} 
+
+$colors: (
+    //Fixed colors
+    'transparent': transparent, 
+    'blue'  : var(--blue), 
+    'gray'  : var(--gray), 
+    'green' : var(--green), 
+    'yellow': var(--yellow), 
+    'red'   : var(--red), 
+    'smoke' : var(--smoke), 
+    'black' : var(--black), 
+    'orange': var(--orange), 
+    'white' : var(--white), 
+    'purple': var(--purple),
+
+    //Action Colors
+    'primary'    : var(--primary-inner), 
+    'secondary'  : var(--secondary-inner), 
+    'success'    : var(--success-inner), 
+    'warning'    : var(--warning-inner), 
+    'danger'     : var(--danger-inner), 
+    'navigation' : var(--navigation-inner), 
+    'information': var(--information-inner),
+
+    //App Colors
+    'breadcrumbs'   : var(--breadcrumbs-inner),
+    'app-background': var(--background-inner), 
+    'app-container' : var(--containers-inner),  
+
+    //Sidenav
+    'app-sidenav'       : var(--sidenav-inner),    
+    'app-sidenav-text'  : var(--sidenav-text-inner),
+    'app-sidenav-active': var(--sidenav-active-inner),
+
+    //Toolbar
+    'app-toolbar'     : var(--toolbar-inner),    
+    'app-toolbar-text': var(--toolbar-text-inner) 
+);
+
+    
+@each $key, $value in $colors {
+    //Text
+    .text-#{$key} { 
+        color: $value !important;
+    }
+    
+    .text-#{$key}-bold {
+        color: $value !important;
+        font-weight: bold !important;
+    } 
+    
+    //Borders
+    .border-#{$key} {
+        border-color: $value !important;
+    }
+
+    .border-top-#{$key} {
+        border-top-color: $value !important;
+    }
+
+    .border-right-#{$key} {
+        border-right-color: $value !important;
+    }
+
+    .border-bottom-#{$key} {
+        border-bottom-color: $value !important;
+    }
+
+    .border-left-#{$key} {
+        border-left-color: $value !important;
+    }
+
+    //Background
+    .background-#{$key} {
+        background-color: $value !important;
+    }
+    
+    .background-border-#{$key} {
+        background-color: $value !important;
+        border-color: $value !important;
+    }
+}

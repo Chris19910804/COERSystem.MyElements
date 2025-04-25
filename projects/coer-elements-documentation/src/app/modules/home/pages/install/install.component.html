@@ -1,0 +1,58 @@
+<!-- Title -->
+<coer-page-title
+    title="Install"
+    [breadcrumbs]="breadcrumbs"
+    [goBack]="goBack" 
+></coer-page-title>   
+ 
+
+<!-- Step 1 -->
+<section class='coer-container-accordion'>
+    <coer-accordion title='Step 1 - Install Dependencies' [expanded]="expanded"> 
+        <ul> 
+            @for(lib of libs; track lib) {
+                <li> {{ lib }} </li>
+            }
+        </ul>  
+    </coer-accordion>
+</section>
+
+
+<!-- Step 2 -->
+<section class='coer-container-accordion'>
+    <coer-accordion title='Step 2 - Add assets folder' [expanded]="expanded"> 
+        <ul> 
+            <li> Create the <b>assets</b> folder inside the <b>src</b> folder </li>
+            <li> Create the <b>appSettings.js</b> file inside the assets folder </li>
+            <li> Add the following object in <b>appSettings.js</b></li>
+        </ul>  
+
+        <pre class='config'>{{ config.appSettings }}</pre> 
+    </coer-accordion>
+</section>
+
+
+<!-- Step 3 -->
+<section class='coer-container-accordion'>
+    <coer-accordion title='Step 3 - angular.json' [expanded]="expanded">  
+        <ul> 
+            <li> In the <b>angular.json</b> file <u>architect</u> > <u>build</u> > <u>options</u>. Add the following configuration</li> 
+        </ul> 
+
+        <pre class='config'>{{ config.stylesScripts }}</pre>
+    </coer-accordion>
+</section>
+
+
+<!-- Step 4 -->
+<section class='coer-container-accordion'>
+    <coer-accordion title='Step 4 - app.config.ts' [expanded]="expanded">  
+        <ul> 
+            <li> {{ "import { INTERCEPTORS } from 'coer-elements/interceptors';" }} </li> 
+            <li> {{ "import { CoerAlert } from 'coer-elements/tools';" }}           </li> 
+            <li> {{ "import 'coer-elements/extensions';" }}                         </li> 
+            <li> Concatenate <b>providers</b> with <b>INTERCEPTORS</b>              </li>
+            <li> Add <b>CoerAlert</b> to <b>providers</b>                           </li>
+        </ul> 
+    </coer-accordion>
+</section>

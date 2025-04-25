@@ -1,0 +1,177 @@
+@if(IsNotNull(_user())) {
+    <coer-toolbar 
+        [user]="_user()" 
+        [image]="userImage()" 
+        [menu]="_toolbarMenu()" 
+        (onClickMenu)="sidenav.Toggle()" 
+        (onClickOption)="__SelectedOption($event)"
+    ></coer-toolbar>
+    
+    <coer-sidenav #sidenav> 
+        <section> 
+            <ng-content></ng-content>
+        </section>  
+    </coer-sidenav>
+
+    <!-- Modal Profile -->    
+    <coer-modal #modalProfile [title]="_profileTitle" icon="fa-solid fa-user" width="auto"> 
+        <coer-filebox
+            type="image"
+            [image]="{ 
+                value: _userImage, 
+                name: _profileTitle,
+                maxWidth: '150px', 
+                maxHeight: '150px', 
+                marginBottom: '15px',
+                allowExpand: false 
+            }"
+            [isLoading]="_isLoading()"
+            (onSelected)="__UploadImage($event)"
+            (onDeleteImage)="__DeleteUserImage()"
+        ></coer-filebox>
+
+        <section class="row coer-system-profile">
+            <!-- User --> 
+            <div class="col-6">
+                <coer-textbox
+                    label="User"
+                    [value]="_user()?.user"
+                    [isReadonly]="true"  
+                    marginBottom="15px"       
+                ></coer-textbox>
+            </div>
+
+            <!-- User Number -->
+            @if(IsNotOnlyWhiteSpace(_user()?.userNumber)) { 
+                <div class="col-6">
+                    <coer-textbox
+                        label="Number"
+                        [value]="_user()?.userNumber"
+                        [isReadonly]="true" 
+                        marginBottom="15px"           
+                    ></coer-textbox>
+                </div>
+            }
+
+            <!-- Email -->
+            <div class="col-6">
+                <coer-textbox
+                    label="Email"
+                    [value]="_user()?.email"
+                    [isReadonly]="true" 
+                    marginBottom="15px"           
+                ></coer-textbox> 
+            </div>
+
+            <!-- Nickame --> 
+            @if(IsNotOnlyWhiteSpace(_user()?.nickname)) { 
+                <div class="col-6">
+                    <coer-textbox
+                        label="Nickame"
+                        [(ngModel)]="_nickname" 
+                        [isLoading]="_isLoading()" 
+                        marginBottom="15px"       
+                    ></coer-textbox>  
+                </div>
+            }   
+
+            @if(IsNotNull(_user()?.roles) && (_user()?.roles!.length > 1)) {
+                <!-- Role -->         
+                <div class="col-6">
+                    <coer-selectbox
+                        label="Role"
+                        [(ngModel)]="_mainRole"
+                        propDisplay="option"
+                        [dataSource]="_userRoles()"
+                        [isLoading]="_isLoading()" 
+                        marginBottom="15px"      
+                    ></coer-selectbox>
+                </div>
+            }
+
+            @else {
+                <div class="col-6">
+                    <coer-textbox
+                        label="Role"
+                        [value]="_user()?.role!" 
+                        [isReadonly]="true" 
+                        marginBottom="15px"       
+                    ></coer-textbox>  
+                </div>
+            }
+        </section> 
+    
+        @if(!_staticLogin) {
+            <ng-template coerRef="footer">
+                <coer-button
+                    #buttonSave
+                    color="dark"
+                    icon="save"
+                    [isLoading]="_isLoading()"
+                    (onClick)="UpdateProfile()"
+                > Update </coer-button>
+            </ng-template>
+        } 
+    </coer-modal> 
+
+    <!-- Modal Password -->
+    <coer-modal #modalPassword title="Reset Password" icon="fa-solid fa-lock" (onClose)="_password = ''; _passwordConfirm = '';">
+        <coer-secretbox
+            #inputPassword
+            label="New Password"
+            [(ngModel)]="_password"
+            [isLoading]="_isLoading()" 
+            [maxLength]="20"
+            marginBottom="15px"
+            (onKeyupEnter)="__Focus()"
+        ></coer-secretbox>
+
+        <coer-secretbox
+            #inputPasswordConfirm
+            label="Confirm Password"
+            [(ngModel)]="_passwordConfirm"
+            [isLoading]="_isLoading()" 
+            [maxLength]="20"
+            (onKeyupEnter)="__Focus()"
+        ></coer-secretbox>
+
+        <ng-template coerRef="footer">
+            <!-- Reset Button -->
+            <coer-button
+                #resetButton
+                color="dark" 
+                [isDisabled]="!_enableButtonLogin"
+                [isLoading]="_isLoading()" 
+                (onClick)="__ResetPassword()"
+            > Reset </coer-button>
+        </ng-template>
+    </coer-modal>
+}
+
+@else {
+    <login-page 
+        #loginPage 
+        (onLogin)="onLogin.emit($event)"
+        (onRecovery)="onRecoveryPassword.emit($event)"
+    ></login-page>
+}  
+
+<coer-alert></coer-alert> 
+
+<div class="d-none">
+    <span id="coer-system-actionColors-primary"></span>
+    <span id="coer-system-actionColors-secondary"></span>
+    <span id="coer-system-actionColors-success"></span>
+    <span id="coer-system-actionColors-warning"></span>
+    <span id="coer-system-actionColors-danger"></span>
+    <span id="coer-system-actionColors-navigation"></span>
+    <span id="coer-system-actionColors-information"></span>
+    <span id="coer-system-appColors-breadcrumbs"></span>
+    <span id="coer-system-appColors-background"></span> 
+    <span id="coer-system-appColors-containers"></span>
+    <span id="coer-system-appColors-sidenav"></span> 
+    <span id="coer-system-appColors-sidenav-text"></span>
+    <span id="coer-system-appColors-sidenav-active"></span>
+    <span id="coer-system-appColors-toolbar"></span> 
+    <span id="coer-system-appColors-toolbar-text"></span> 
+</div>

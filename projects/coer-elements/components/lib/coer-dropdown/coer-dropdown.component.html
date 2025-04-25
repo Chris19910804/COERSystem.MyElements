@@ -1,0 +1,74 @@
+<div class="coer-dropdown">
+    <div [id]="_id + '-container'">
+        <div [ngClass]="{ 'd-none': isInvisible() }">
+            <coer-button
+                [color]="color()"
+                [type]="type()"
+                [icon]="_icon"
+                [isLoading]="isLoading()"
+                [isDisabled]="isDisabled()" 
+                [width]="width()"
+                [minWidth]="minWidth()"
+                [maxWidth]="maxWidth()"
+                [marginTop]="marginTop()"
+                [marginRight]="marginRight()"
+                [marginBottom]="marginBottom()"
+                [marginLeft]="marginLeft()"
+                [tooltip]="tooltip()"
+                [tooltipPosition]="tooltipPosition()"
+                (onClick)="_Toggle()"
+            > {{ _label }} </coer-button>
+        </div>
+
+        <div [ngClass]="{ 'd-none': !isInvisible(), 'invisible': true  }">
+            <coer-button
+                [width]="width()"
+                [minWidth]="minWidth()"
+                [maxWidth]="maxWidth()"
+                [marginTop]="marginTop()"
+                [marginRight]="marginRight()"
+                [marginBottom]="marginBottom()"
+                [marginLeft]="marginLeft()"
+            ></coer-button>
+        </div>
+    </div>
+
+    <!-- Options Container -->
+    <div class="btn-group">
+        <ul [id]="_id + '-dropdown-menu'" 
+            class="dropdown-menu"
+            [ngStyle]="{
+                width: width(),
+                minWidth: minWidth()
+            }">
+
+            @if(_dataSource().length <= 0) {
+                <li class="no-options">
+                    <div [id]="id + '-dropdown-option-' + -1" class='dropdown-item cursor-pointer no-options'
+                    > -- No Options -- </div>
+                </li>
+            }
+
+            @for(item of _dataSource(); track _GetIndexRow(item)) {
+                <li (click)="_SelectItem(item)">
+                    <a [routerLink]="_GetPath(item)" class="text-decoration-none">
+                        <div [id]="id + '-dropdown-option-' + _GetIndexRow(item)"
+                            [ngClass]="{
+                                'dropdown-item': true,
+                                'cursor-pointer': true,
+                                'gap-2': true,
+                                'dropdown-item-focus': _index() == _GetIndexRow(item)
+                            }"> 
+
+                            @if (_GetIcon(item).length > 0) {
+                                <i [class]="_GetIcon(item)"></i>
+                            }
+                            <span> {{ _GetDisplay(item) }} </span>
+                        </div>
+                    <hr class="dropdown-divider">
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+</div>  

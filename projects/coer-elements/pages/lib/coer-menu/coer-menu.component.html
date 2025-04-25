@@ -1,0 +1,28 @@
+<!-- Title -->
+<coer-page-title
+    title="Menu"
+    [breadcrumbs]="breadcrumbs"
+    [goBack]="goBack"
+></coer-page-title>
+
+<div class="flex-wrap-left fade-in">
+    @for(item of _gridMenu(); track item.id) {   
+        @if(_isPage(item)) {
+            <a [routerLink]="_getPath(item)" class="flex-wrap-item">
+                @if(IsNotOnlyWhiteSpace(item?.icon)) {
+                    <i [class]="item!.icon"></i>
+                }
+                <span> {{ item.label }} </span>
+            </a> 
+        }
+
+        @else {
+            <a [routerLink]="null" class="flex-wrap-item menu">
+                @if(IsNotOnlyWhiteSpace(item?.icon)) {
+                    <i [class]="item!.icon"></i>
+                }
+                <span> {{ item.label }} </span>
+            </a> 
+        }
+    }
+</div>

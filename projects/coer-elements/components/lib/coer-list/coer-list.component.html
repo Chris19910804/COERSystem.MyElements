@@ -1,0 +1,128 @@
+<div [id]="_id" class="coer-list" [ngStyle]="{ 
+  'margin-top': marginTop(), 
+  'margin-right': marginRight(), 
+  'margin-bottom': marginBottom(), 
+  'margin-left': marginLeft(), 
+  }">
+
+  @if(isLoading()) {
+    <!-- Grid Message -->
+    <div class="loading">
+        <i class="spinner-border"></i>
+        <span class="fa-fade">Loading</span>
+    </div>
+  }
+
+  @else if(dataSource().length <= 0) {
+    <div class="no-data"> No Data </div>
+  }
+
+  <header [id]="_id + '-header'" class="row"> 
+    @if(header().length > 0 || headerIcon().length > 0) {
+      <div class="col-auto me-auto">
+        <h6>
+          @if(headerIcon().length > 0) {
+            <i [class]="headerIcon()"></i> 
+          }
+
+          @if(header().length > 0) {
+            <span>{{ header() }}</span> 
+          }
+        </h6>        
+      </div>
+    }
+
+    @if(_showBackButton()) {
+      <div class="col-auto ps-2 pe-0">         
+        <coer-button
+            type="icon-outline"
+            color="secondary"
+            icon="back"
+            tooltip="Back"
+            [animation]="_enableAnimations"
+            (onClick)="onClickBack.emit()"
+        ></coer-button>       
+      </div>
+    }
+    
+    <!-- Search -->
+    @if(showSearch() && dataSource().length > 0) {
+      <div class="col-auto pe-0">
+          <coer-textbox
+              #inputSearch 
+              placeholder="Search"
+              [isDisabled]="isLoading()"
+              [selectOnFocus]="true"
+              width="250px"
+              marginTop="5px"
+              marginBottom="5px"
+              [showSearchIcon]="true"
+              [showClearIcon]="true"
+          ></coer-textbox>
+      </div>
+    }
+  </header>
+
+  <div [ngStyle]="{ 
+    'width': width(), 
+    'min-Width': MinWidth(), 
+    'max-Width': MaxWidth(), 
+    }">
+    <ul cdkDropList (cdkDropListDropped)="_Drop($event)" class='list-group coer-list'
+        [ngStyle]="{ 
+          'height': _height, 
+          'min-height': minHeight(), 
+          'max-height': maxHeight(), 
+          'd-none': dataSource().length <= 0  
+          }">
+      
+      @for (item of _dataSource(); track _GetIndexRow(item)) {
+        <li cdkDrag 
+          class="list-group-item coer-list-box" 
+          cdkDragBoundary="ul.coer-list"
+          (click)="onClick.emit(item)" 
+          (dblclick)="onDoubleClick.emit(item)">
+  
+          <div *cdkDragPlaceholder class="coer-list-placeholder cursor-grabbing"></div>
+          <div class="coer-list-content"> 
+            @if(_hasTemplate()) {
+              <div [innerHTML]="_GetTemplate(item) | html" class="template"></div>
+            }
+  
+            @else {
+              <div> {{ _GetDisplay(item) }} </div> 
+            }            
+            
+            <div>
+              @if(_showDeleteButtonByRow(item)) {
+                <coer-button
+                  type="icon-no-border"
+                  color="secondary"
+                  icon="delete"      
+                  (onClick)="onClickDelete.emit(item)"
+                ></coer-button>
+              } 
+  
+              @if(_showGoButtonByRow(item)) {
+                <coer-button
+                  type="icon-no-border"
+                  color="secondary"
+                  icon="go"   
+                  marginLeft="5px"   
+                  (onClick)="onClickGo.emit(item)"
+                ></coer-button>
+              } 
+               
+              <i cdkDragHandle [ngClass]="{ 
+                'fa-solid fa-grip-vertical text-secondary ps-2': true,
+                'cursor-grab': true, 
+                'cursor-grabbing': false, 
+                'd-none': !_isDraggable()
+              }"></i>               
+            </div>           
+          </div>  
+        </li> 
+      } 
+    </ul>
+  </div>
+</div>

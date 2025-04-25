@@ -1,0 +1,159 @@
+coer-button {
+    display: contents !important;
+}
+
+div.coer-button {
+
+    a {
+        display: inline-block !important;
+        height: fit-content !important;
+        text-decoration: none !important;
+    }
+
+    a.animate__disabled {
+        animation-duration: 0s !important;
+    }
+
+    display: contents !important;
+
+    button {
+        font-size: 17px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .slot {
+        width: 100px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important; 
+        overflow: visible !important;
+    }
+
+    $colors: ( 
+        'primary':     var(--primary-inner), 
+        'secondary':   var(--secondary-inner), 
+        'success':     var(--success-inner), 
+        'warning':     var(--warning-inner), 
+        'danger':      var(--danger-inner), 
+        'navigation':  var(--navigation-inner), 
+        'information': var(--information-inner),
+        'dark':        var(--black),
+        'light':       var(--white)
+    );
+
+    @each $key, $value in $colors {
+        //filled
+        button.#{$key}-filled {
+            background-color: $value !important;
+
+            @if ($key == 'warning' or $key == 'light') {
+                color: var(--black) !important;
+            }
+
+            @else {
+                color: var(--white) !important;
+            } 
+        }
+
+        //outline
+        button.#{$key}-outline {
+
+            @if ($key == 'light') {
+                background-color: transparent !important; 
+            }
+
+            @else {
+                background-color: var(--white) !important; 
+            }  
+            
+            color: $value !important;
+            border: 1px solid $value !important; 
+        }
+
+        //focus
+        button.#{$key}-filled:not(.readonly):focus,
+        button.#{$key}-outline:not(.readonly):focus {
+            box-shadow: 0px 0px 20px $value !important;
+        }
+
+        //hover & focus
+        button.#{$key}-filled:not(.readonly):hover,
+        button.#{$key}-filled:not(.readonly):focus,
+        button.#{$key}-outline:not(.readonly):hover, 
+        button.#{$key}-outline:not(.readonly):focus {
+            filter: brightness(1.1) !important;
+        }
+    }    
+    
+
+    button.mdc-icon-button.mat-mdc-icon-button {
+        width: 40px !important;
+        height: 40px !important;
+        padding: 0px !important;
+    }
+
+    button.mdc-icon-button.mat-mdc-icon-button.icon-no-border {
+        width: 25px !important;
+        height: 25px !important;
+        background-color: transparent !important;
+        border: none !important;
+        overflow: visible !important;
+
+        * {
+            font-size: medium !important;
+        }
+
+        i.bi-box-arrow-left,
+        i.bi-box-arrow-in-right {
+            font-size: 20px !important;
+        }
+    }
+
+    //readonly
+    button.readonly,
+    button.readonly:hover,
+    button.readonly:focus {
+        background-color: rgb(223, 222, 222) !important;
+        border-color: rgb(223, 222, 222) !important;
+        color: var(--white) !important;
+    }
+
+    //invisible
+    coer-button[ishidden="true"],
+    coer-button[ng-reflect-invisible="true"] {
+        position: relative !important;
+        top: calc(100vh * 100);
+        left: calc(100vw * 100);
+    }
+
+    a.loading {
+        cursor: wait !important;
+    }
+
+    i { 
+        display: flex !important;
+        align-items: center !important; 
+        justify-content: center !important;
+    }
+
+    i.spinner-border {
+        width: 15px !important;
+        height: 15px !important;
+        font-size: 16px !important;
+    }
+
+    span {
+        font-weight: bold !important;
+    }
+
+    .mat-mdc-button-touch-target {
+        width: 0px !important;
+        height: 0px !important;
+    }
+}
+

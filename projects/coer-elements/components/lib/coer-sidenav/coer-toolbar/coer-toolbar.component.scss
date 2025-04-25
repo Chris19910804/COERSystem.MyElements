@@ -1,0 +1,108 @@
+div#coer-tool-bar {
+    z-index: 1;
+
+    mat-toolbar {
+        height: 45px !important;
+        position: relative !important;
+        z-index: 10 !important;
+        padding: 0px !important;
+        background-color: var(--toolbar-inner) !important;
+        color: var(--toolbar-text-inner) !important;
+
+        span.app-name {
+            height: 40px !important;
+            display: contents !important;
+            max-width: 45%;
+        }
+
+        div.logo-image-container {
+            height: 45px !important;
+            min-width: 100px;
+
+            div.logo-image {
+                background-size: contain !important; 
+                background-repeat: no-repeat !important;
+                background-position-y: bottom;
+                width: 100% !important;
+                height: 100% !important; 
+                cursor: pointer !important;
+            }
+        }
+
+        div.button-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+        }
+
+        div.user-container {
+            max-width: 45%;
+            display: flex;
+            align-items: center;
+            font-size: small !important;
+            font-weight: bold;
+            height: 0px !important;
+            max-height: 0px !important;
+            padding-left: 2px !important; 
+            margin-right: 10px !important;
+            border-radius: 8px !important;
+            cursor: pointer !important;  
+
+            div.user-image { 
+                min-width: 35px !important;
+                max-width: 35px !important; 
+                min-height: 35px !important;
+                max-height: 35px !important;
+                border-radius: 25px;
+                background: transparent;
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-position: top;
+            }
+
+            div.user-identity {
+                height: 40px !important;
+                max-height: 40px !important;
+                min-width: 70px !important;
+                overflow: hidden !important;
+                display: flex !important;
+                flex-flow: column !important;
+                justify-content: center !important;  
+
+                p {
+                    line-height: normal !important;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                p::selection {
+                    background-color: transparent !important;
+                }
+            }
+
+            coer-dropdown {
+                position: absolute;
+                transform: translate(-3px, 0px); 
+
+                ul {
+                    right: 0px !important;
+                }
+            } 
+        }
+
+        div.user-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0px 0px 15px -5px black !important;
+        }
+    }
+
+    div.shadow {
+        box-shadow: 1px -10px 20px black !important;
+        width: 100vw;
+        height: 45px;
+        position: absolute;
+        top: 0;
+        z-index: 8;
+    }
+}

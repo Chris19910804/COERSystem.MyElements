@@ -1,0 +1,49 @@
+table {
+    font-family: consolas, console !important;
+    margin-bottom: 0px !important;
+    table-layout: auto !important;
+
+    * {
+        font-family: consolas, console !important;
+    }
+
+    tr:hover {
+        background-color: transparent !important;
+    }
+     
+    .option, .type {
+        text-align: center;
+        white-space: nowrap !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;  
+        min-width: 150px;
+    }
+
+    .description {
+        width: 100% !important;
+        min-width: 50% !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    } 
+
+    .type-description {
+        text-align: left !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        width: 100% !important;
+        min-width: 50% !important;         
+    } 
+
+    .separator {
+        color: black !important;
+    }
+
+    .separator:last-child {
+        display: none !important; 
+    }
+
+    a {
+        text-decoration: none !important;
+        color: inherit !important;
+    }
+}

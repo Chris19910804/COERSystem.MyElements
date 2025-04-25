@@ -1,0 +1,154 @@
+<table class="table table-sm table-bordered table-hover table-responsive"> 
+    <tbody>
+        @for(option of options(); track option) {  
+            <tr> 
+                <!-- Name & Type & Description -->
+                @if(IsNotOnlyWhiteSpace(option?.type) && IsNotOnlyWhiteSpace(option?.description)) {
+                    <th class="option" scope="row"> 
+                        @for(name of GetNames(option.name); track name) {
+                            <span> 
+                                @if(IsArray(name)) {
+                                    <span [ngStyle]="{ 'color': GetColor(name.split('[]')[0]) }">
+                                        <a [routerLink]="GetPath(name.split('[]')[0])" (click)="onDestroy.emit(name.split('[]')[0])">{{ name.split('[]')[0] }}</a>      
+                                    </span>[]
+                                }
+
+                                @else {
+                                    <span [ngStyle]="{ 'color': GetColor(name) }"> 
+                                        <a [routerLink]="GetPath(name)" (click)="onDestroy.emit(name)"> {{ name }} </a>
+                                    </span>
+                                    
+                                } 
+                            </span>
+
+                            <span class="separator"> | </span>
+                        } 
+                    </th> 
+
+                    <td class="type"> 
+                        @for(type of GetNames(option?.type); track type) {
+                            <span class="fw-bold"> 
+                                @if(IsArray(type)) {
+                                    <span [ngStyle]="{ 'color': GetColor(type.split('[]')[0]) }">
+                                        <a [routerLink]="GetPath(type.split('[]')[0])" (click)="onDestroy.emit(type.split('[]')[0])">{{ type.split('[]')[0] }}</a>
+                                    </span>[]
+                                }
+
+                                @else {
+                                    <span [ngStyle]="{ 'color': GetColor(type) }"> 
+                                        <a [routerLink]="GetPath(type)" (click)="onDestroy.emit(type)"> {{ type }} </a>    
+                                    </span>
+                                } 
+                            </span>
+
+                            <span class="separator"> | </span>
+                        }
+                    </td>
+                    
+                    <td class='description'>
+                        <span>
+                            {{ option.description }}
+                        </span>
+                    </td>   
+                }
+
+                <!-- Name & Description -->
+                @else if(IsOnlyWhiteSpace(option?.type) && IsNotOnlyWhiteSpace(option?.description)) {
+                    <th class="option" scope="row">
+                        @for(name of GetNames(option.name); track name) {
+                            <span> 
+                                @if(IsArray(name)) {
+                                    <span [ngStyle]="{ 'color': GetColor(name.split('[]')[0]) }">
+                                        <a [routerLink]="GetPath(name.split('[]')[0])" (click)="onDestroy.emit(name.split('[]')[0])">{{ name.split('[]')[0] }}</a>       
+                                    </span>[]
+                                }
+
+                                @else {
+                                    <span [ngStyle]="{ 'color': GetColor(name) }"> 
+                                        <a [routerLink]="GetPath(name)" (click)="onDestroy.emit(name)"> {{ name }} </a>     
+                                    </span>
+                                } 
+                            </span>
+
+                            <span class="separator"> | </span>
+                        }
+                    </th> 
+
+                    <td class='description' colspan="2"> 
+                        <span>
+                            {{ option.description }}
+                        </span> 
+                    </td> 
+                }
+
+                <!-- Name & Type -->
+                @else if(IsNotOnlyWhiteSpace(option?.type) && IsOnlyWhiteSpace(option?.description)) {
+                    <th class="option" scope="row">
+                        @for(name of GetNames(option?.name); track name) {
+                            <span> 
+                                @if(IsArray(name)) {
+                                    <span [ngStyle]="{ 'color': GetColor(name.split('[]')[0]) }">
+                                        <a [routerLink]="GetPath(name.split('[]')[0])" (click)="onDestroy.emit(name.split('[]')[0])">{{ name.split('[]')[0] }}</a>
+                                    </span>[]
+                                }
+
+                                @else {
+                                    <span [ngStyle]="{ 'color': GetColor(name) }">
+                                        <a [routerLink]="GetPath(name)" (click)="onDestroy.emit(name)"> {{ name }} </a>
+                                    </span>
+                                } 
+                            </span>
+
+                            <span class="separator"> | </span>
+                        }
+                    </th> 
+
+                    <td class="type-description" colspan="2"> 
+                        @for(type of GetNames(option?.type); track type) {
+                            <span class="fw-bold"> 
+                                @if(IsArray(type)) {
+                                    <span [ngStyle]="{ 'color': GetColor(type.split('[]')[0]) }">
+                                        <a [routerLink]="GetPath(type.split('[]')[0])" (click)="onDestroy.emit(type.split('[]')[0])">{{ type.split('[]')[0] }}</a>
+                                    </span>[]
+                                }
+
+                                @else {
+                                    <span [ngStyle]="{ 'color': GetColor(type) }"> 
+                                        <a [routerLink]="GetPath(type)" (click)="onDestroy.emit(type)"> {{ type }} </a>
+                                    </span>
+                                } 
+                            </span>
+
+                            <span class="separator"> | </span>
+                        }
+                    </td>
+                } 
+
+                <!-- Name -->
+                @else {
+                    <th class="option" scope="row"> 
+                        @for(name of GetNames(option.name); track name) {
+                            <span> 
+                                @if(IsArray(name)) {
+                                    <span [ngStyle]="{ 'color': GetColor(name.split('[]')[0]) }">
+                                        <a [routerLink]="GetPath(name.split('[]')[0])" (click)="onDestroy.emit(name.split('[]')[0])">{{ name.split('[]')[0] }}</a>
+                                    </span>[]
+                                }
+
+                                @else {
+                                    <span [ngStyle]="{ 'color': GetColor(name) }"> 
+                                        <a [routerLink]="GetPath(name)" (click)="onDestroy.emit(name)"> {{ name }} </a> 
+                                    </span>
+                                } 
+                            </span>
+
+                            <span class="separator"> | </span>
+                        }
+                    </th> 
+
+                    <td class='description' colspan="2"></td>
+                }
+            </tr>                           
+        }
+      </tbody>
+</table> 

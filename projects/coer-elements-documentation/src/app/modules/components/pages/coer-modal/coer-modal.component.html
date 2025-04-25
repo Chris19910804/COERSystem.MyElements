@@ -1,0 +1,19 @@
+<!-- Title -->
+<coer-page-title
+    title="Modal"
+    [breadcrumbs]="breadcrumbs"
+    [goBack]="goBack"
+    [information]="{ show: true, tooltip: 'Quick Implement' }"
+    (onClickInformation)="documentation.ShowQuickImplement()"
+></coer-page-title>
+
+<!-- Documentation -->
+<documentation  
+    #documentation
+    [component]="component"
+    [inputs]="inputs"
+    [events]="events"
+    [functions]="functions"
+    [properties]="properties"
+    [quickImplement]="quickImplement"
+></documentation>

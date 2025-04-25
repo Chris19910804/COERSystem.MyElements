@@ -1,0 +1,49 @@
+@use 'sass:color';
+
+header.coer-page-title {
+    margin: 15px 30px 0px 30px;
+
+    h2 {
+        margin: 0px 0px 10px 0px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 20px;
+        font-size: 20px;
+
+        span {
+            font-size: 20px !important;
+        }          
+    }
+
+    nav {
+        height: auto;
+        min-height: 25px;
+        font-size: small; 
+        background-color: color-mix(in srgb, var(--gray), white 90%) !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        a.go-back-button {
+            min-width: 60px;
+        }
+    }
+
+    ol, a {
+        margin: 0px;
+        padding-left: 5px;
+        text-decoration: none;
+        color: var(--breadcrumbs-inner) !important;
+        font-weight: normal !important;
+        cursor: pointer !important;
+    }
+
+    ol::selection, a::selection {
+        background-color: transparent !important;
+    }
+
+    li {
+        border: none;
+    } 
+}

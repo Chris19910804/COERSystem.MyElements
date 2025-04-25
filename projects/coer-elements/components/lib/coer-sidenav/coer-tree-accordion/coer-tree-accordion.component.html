@@ -1,0 +1,72 @@
+<mat-accordion class="coer-tree-accordion">
+    <mat-expansion-panel #expansionPanel [class]="'coer-tree-accordion-' + identityClass">
+
+        <!-- Header -->
+        <mat-expansion-panel-header (click)="Toggle()"
+            [class]="identityClass"
+            [ngClass]="{
+                'background-navigation': (isExpanded && level == 1),
+                'text-app-sidenav-active': IsActive(iconContainer)
+            }">
+            <mat-panel-description>
+                <span #iconContainer
+                    [ngStyle]="{ 'margin-left': marginLeft }"
+                    [class]="identityClass"
+                    [ngClass]="{
+                        'icon-container': true,
+                        'text-app-sidenav-active': IsActive(iconContainer)
+                    }"> <i [class]="_icon"></i> </span>
+
+                <span #labelContainer
+                    [class]="identityClass"
+                    [ngClass]="{
+                        'label-container': true,
+                        'text-app-sidenav-active': IsActive(labelContainer)
+                    }"> {{ item.label }} </span>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+
+        @if(showTree) { 
+            <div *ngFor="let subItem of item.items">
+                <!-- Sub Menu -->
+                <div *ngIf="IsMenu(subItem); else isOption"> 
+                    @if(IsGrid(subItem)) {
+                        <coer-menu-option
+                            [label]="subItem.label"
+                            [icon]="GetGridIcon(subItem!.icon)"
+                            path='menu'
+                            [level]="level + 1"
+                            [tree]="_tree"
+                            (clickMenuOption)="ShowGridMenu($event, subItem)"
+                        ></coer-menu-option>
+                    }
+
+                    @else {
+                        <coer-tree-accordion
+                            [level]="level + 1"
+                            [item]="subItem"
+                            [tree]="_tree"
+                            (clickMenuOption)="ClickMenuOption($event)"
+                            (clickMenu)="ClickMenu($event)"
+                        ></coer-tree-accordion> 
+                    }
+                </div>
+
+                <!-- Option Menu -->
+                <ng-template #isOption>
+                    <coer-menu-option
+                        [label]="subItem.label"
+                        [icon]="subItem?.icon"
+                        [path]="subItem?.path"
+                        [level]="level + 1"
+                        [tree]="_tree"
+                        (clickMenuOption)="ClickMenuOption($event)"
+                    ></coer-menu-option>
+                </ng-template>
+
+                <div class="separator"></div>
+            </div>
+        }
+    </mat-expansion-panel>
+</mat-accordion>

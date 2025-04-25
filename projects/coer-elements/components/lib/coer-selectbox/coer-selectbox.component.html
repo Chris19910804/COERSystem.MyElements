@@ -1,0 +1,83 @@
+<div class="coer-select-box">
+    <mat-form-field
+        [id]="_id + '-container'" 
+        [floatLabel]="_floatLabel()"
+        [ngClass]="{
+            'readonly': isReadonly() && !isLoading()
+        }"
+        [style]="{
+            'width': width(),
+            'min-width': minWidth(),
+            'max-width': maxWidth(),
+            'margin-top': marginTop(),
+            'margin-right': marginRight(),
+            'margin-bottom': marginBottom(),
+            'margin-left': marginLeft()
+        }">
+        <mat-label>{{ label() }}</mat-label>
+
+        <input #coerTextBox matInput
+            [id]="_id"
+            type="text"
+            [value]="_search()"
+            [placeholder]="_placeholder"
+            [disabled]="!_isEnable()"
+            (input)="_Search(coerTextBox.value)"
+            (blur)="SetTouched(true)"
+            [style]="{
+                'cursor': isLoading() ? 'wait' : null,
+                'margin-top': (_floatLabel() == 'auto') ? '15px' : '9px',
+                'padding-right': _paddingRight
+            }">
+
+        @if(isLoading()) {
+            <div class="placeholder-glow">
+                <span class="placeholder"></span>
+            </div>
+        }
+
+        <span class="icon-container" [style]="{ 'width': _widthIcons }">
+            @if(_showCancel && _isEnable() && !isLoading()) {
+                <i class="fa-solid fa-xmark text-secondary" (click)="Unselect()"></i>
+            }
+
+            @else if(isInvalid() && !isLoading()) {
+                <i class="fa-solid fa-circle-exclamation"></i>
+            }
+
+            @else if(isValid() && !isLoading()) {
+                <i class="fa-solid fa-circle-check text-green"></i>
+            }
+
+            @if(_isOpen() && _isEnable() && !isLoading()) {
+                <i class="fa-solid fa-caret-up cursor-pointer text-primary" (click)="Blur()"></i>
+            }
+
+            @else if(_isEnable() && !isLoading()) {
+                <i class="fa-solid fa-caret-down cursor-pointer text-secondary"></i>
+            }
+        </span>
+    </mat-form-field>
+
+    <!-- Options Container -->
+    <div class="btn-group">
+        <ul [id]="_id + '-dropdown-menu'" 
+            class="dropdown-menu"
+            [ngStyle]="{
+                width: _dropDownWidth
+            }">
+            @for(item of _dataSource(); track _GetIndexRow(item)) {
+                <li (click)="_SelectItem(item)">
+                    <div [id]="id + '-dropdown-option-' + _GetIndexRow(item)"
+                        [ngClass]="{
+                            'dropdown-item': true,
+                            'cursor-pointer': true,
+                            'dropdown-item-focus': _index() == _GetIndexRow(item)
+                        }"
+                    >{{ _GetDisplay(item) }} </div>
+                    <hr class="dropdown-divider">
+                </li>
+            }
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,409 @@
+<div class="coer-grid" [ngStyle]="{ 'width': width(), 'min-Width': MinWidth(), 'max-Width': MaxWidth(), 'margin': margin() }">
+    <header [id]="_id + '-header'" class="row">
+        <!-- Slot -->
+        <ng-content></ng-content>
+
+        <!-- Export Button -->
+        @if(exportButton.show && gridLength().dataSource > 0) {
+            <div class="col-auto">
+                <coer-button
+                    type="icon"
+                    [color]="_ColorButton(exportButton)"
+                    icon="excel"
+                    [tooltip]="_isLoading() ? 'Loading' : (exportButton.tooltip || 'Export')"
+                    [path]="(exportButton && exportButton.path) ? exportButton.path : []"
+                    [isDisabled]="_isDisabled() || _isLoading() || (exportButton.isDisabled || false)"
+                    [isLoading]="_isLoading()"
+                    [animation]="_enableAnimations"
+                    (onClick)="Export(!exportButton.preventDefault)"
+                ></coer-button>
+            </div>
+        }
+
+        <!-- Import Button -->
+        @if(importButton.show && !isReadonly()) {
+            <div class="col-auto">
+                <input type="file" #inputFileRef [multiple]="false" (change)="_Import($event)">
+
+                <coer-button
+                    type="icon"
+                    color="primary"
+                    [color]="_ColorButton(importButton)"
+                    [tooltip]="importButton.tooltip || 'Import'"
+                    [path]="(importButton && importButton.path) ? importButton.path : []"
+                    [isDisabled]="importButton.isDisabled || false"
+                    [animation]="_enableAnimations"
+                    (onClick)="_Import()"
+                ></coer-button>
+            </div>
+        }
+
+        <!-- Add Button -->
+        @if(addButton.show && !isReadonly()) {
+            <div class="col-auto">
+                <coer-button
+                    type="icon"
+                    [color]="_ColorButton(addButton)"
+                    icon="new"
+                    [tooltip]="addButton.tooltip || 'New'"
+                    [path]="(addButton && addButton.path) ? addButton.path : []"
+                    [isDisabled]="addButton.isDisabled || false"
+                    [animation]="_enableAnimations"
+                    (onClick)="onClickAdd.emit()"
+                ></coer-button>
+            </div>
+        }
+
+        <!-- Save Button -->
+        @if(saveButton.show && !isReadonly()) {
+            <div class="col-auto">
+                <coer-button
+                    type="icon"
+                    [color]="_ColorButton(saveButton)"
+                    icon="save"
+                    [tooltip]="saveButton.tooltip || 'Save'"
+                    [path]="(saveButton && saveButton.path) ? saveButton.path : []"
+                    [isDisabled]="saveButton.isDisabled || false"
+                    [animation]="_enableAnimations"
+                    (onClick)="onClickSave.emit()"
+                ></coer-button>
+            </div>
+        }
+
+        <!-- Search -->
+        @if(search.show) {
+            <div class="col-auto">
+                <coer-textbox
+                    #inputSearch
+                    [id]="_GetId(-1, -1, 'search')"
+                    [ngModel]="_gridSearch()"
+                    placeholder="Search"
+                    [isDisabled]="_isDisabled() || _isLoading()"
+                    [selectOnFocus]="true"
+                    width="250px"
+                    [showSearchIcon]="true"
+                    [showClearIcon]="true"
+                    (onInput)="_InputChange(-1, 'Search', $event, 'coer-textbox-search')"
+                    (onClickClear)="_InputChange(-1, 'Search', '', 'coer-textbox-search')"
+                    (onKeyupEnter)="_KeyupEnter(-1, { indexRow: -1 }, 'coer-textbox-search', $event);"
+                ></coer-textbox>
+            </div>
+        }
+    </header>
+
+    <section [ngClass]="{ 'grid-container': true, 'invisible': isInvisible() }">  
+        <div #innerContainer [ngStyle]="{ 'height': _height, 'min-height': minHeight(), 'max-height': maxHeight() }">  
+            @if(!_isDisabled() && gridLength().dataSource <= 0 && !isLoading()) {
+                <div class="no-data"> No Data </div>
+            }
+        
+            @if(!isLoading()) {
+                <table class="table table-sm table-responsive table-striped">
+                    <thead>
+                        <tr>
+                            @if(checkbox.show && gridLength().dataSource > 0) {
+                                <!-- CheckBox Column -->
+                                <th scope="col" class="check-box">
+                                    <div *ngIf="!_onlyOneCheck" [ngClass]="{ 'invisible': _isLoadingMessage }">
+                                        <coer-checkbox
+                                            [id]="_GetId(0, 0, 'checkboxAll')"
+                                            [ignoreDataBinding]="true"
+                                            [isDisabled]="_isDisabled() || _isLoading()"
+                                            (onChange)="_ClickCheck(_GetId(0, 0, 'checkboxAll'), $event, true)"
+                                        ></coer-checkbox>
+                                    </div>
+                                </th>
+                            }
+    
+                            <!-- Dynamic Grid Column -->
+                            @for(header of _gridColumns(); track header.indexColumn) {
+                                <th scope="col" (dblclick)="Sort(header.columnName)"
+                                    [ngClass]="{
+                                        'no-selection': true,
+                                        'cursor-default': !enableSort() && !_isLoading(),
+                                        'cursor-pointer': enableSort() && !_isLoading(),
+                                        'cursor-wait': _isLoading()
+                                    }"
+                                    [ngStyle]="{
+                                        'width': header.width,
+                                        'text-align': _GetAttribute(header.columnName, null, 'textAlign', 'defaul-cell')
+                                    }">
+                                    <div class="no-selection d-flex align-items-center">
+                                        <span class="me-1"> {{ _GetColumnName(header.columnName) }} </span>
+                                        <i [class]="_GetShortIcon(header.columnName)"></i> 
+                                        <i [class]="_GetSearchIcon(header.columnName)"></i>
+                                    </div>
+                                </th>
+                            }
+    
+                            <!-- Delete Button Column -->
+                            @if(_ButtonByRow('showDeleteButton')) {
+                                <th scope="col" class="action-button"></th>
+                            }
+    
+                            <!-- Edit Button Column -->
+                            @if(_ButtonByRow('showEditButton')) {
+                                <th scope="col" class="action-button"></th>
+                            }
+    
+                            <!-- Edit Button Column -->
+                            @if(_ButtonByRow('showGoButton')) {
+                                <th scope="col" class="action-button"></th>
+                            }
+                        </tr>
+                    </thead>
+    
+                    <!-- body -->
+                    @for(group of _gridDataSource(); track group.indexGroup) {
+                        <tbody>
+                            <!--<tr v-if="_isGrouped">
+                                <td :colspan="_colspan" class="group">
+                                    <MesAccordion
+                                        :ref="`accordion${group.indexGroup}-${id}`"
+                                        :title="`${_CleanHeaderName(groupBy)} (${group.length}):  ${group.groupBy}`"
+                                        :isLoading="_isLoading()"
+                                        @expanded="_ToogleAccordion(group.groupBy, true, group.indexGroup)"
+                                        @collapsed="_ToogleAccordion(group.groupBy, false, group.indexGroup)"
+                                    ></MesAccordion>
+                                </td>
+                            </tr>-->
+    
+                            @for(row of group.rows; track row.indexRow) {
+                                <tr [id]="_GetId(row.indexRow, 0, 'row')"
+                                    [ngClass]="{ 'loading': isLoading(), 'd-none': _HideRow(group), 'row-focus': (row.indexRow == _indexFocus() && enableRowFocus()) }"
+                                    (click)="_indexFocus.set(row.indexRow)">
+    
+                                    @if(checkbox.show) {
+                                        <!-- CheckBox Column -->
+                                        <td class="check-box">
+                                            <div [ngClass]="{ 'invisible': _isLoadingMessage }">
+                                                <coer-checkbox
+                                                    [id]="_GetId(row.indexRow, 0, 'checkbox')"
+                                                    [ignoreDataBinding]="true"
+                                                    [isDisabled]="_isDisabled() || _isLoading()"
+                                                    (onChange)="_ClickCheck(_GetId(row.indexRow, 0, 'checkbox'), $event, false, row)"
+                                                ></coer-checkbox>
+                                            </div>
+    
+                                            <div [ngClass]="{ 'invisible': !_isLoadingMessage, 'spinner-border-container': true }">
+                                                <i class="spinner-border"></i>
+                                            </div>
+                                        </td>
+                                    }
+    
+                                    <!-- Dynamic Column -->
+                                    @for(header of _gridColumns(); track header.indexColumn) {
+                                        @if(_IsCellType(header.columnName, row, 'template')) {
+                                            <td class="template"
+                                                (click)="_isDisabled() ? null : onClickRow.emit(row)"
+                                                (dblclick)="_isDisabled() ? null : onDoubleClickRow.emit(row)">
+                                                <div [innerHTML]="_GetAttribute(header.columnName, row, 'template', 'defaul-cell') | html" class="template"></div>
+                                            </td>
+                                        }
+    
+                                        @else if(_IsCellType(header.columnName, row, 'coerTextbox')) {
+                                            <!-- coer-textbox -->
+                                            <td class="coer-textbox">
+                                                <coer-textbox
+                                                    [id]="_GetId(row.indexRow, header.indexColumn)"
+                                                    [(ngModel)]="row[header.columnName]"
+                                                    [isDisabled]="_GetAttribute(header.columnName, row, 'isDisabled', 'coerTextbox') || _isDisabled() || _isLoading()"
+                                                    [isValid]="_GetAttribute(header.columnName, row, 'isValid', 'coerTextbox') || false"
+                                                    [isInvalid]="_GetAttribute(header.columnName, row, 'isInvalid', 'coerTextbox') || false"
+                                                    [selectOnFocus]="_GetAttribute(header.columnName, row, 'selectOnFocus', 'coerTextbox') || true"
+                                                    [placeholder]="_GetAttribute(header.columnName, row, 'placeholder', 'coerTextbox') || ('Type ' + header.columnName + '...')"
+                                                    [textPosition]="_GetAttribute(header.columnName, row, 'textPosition', 'coerTextbox') || 'left'"
+                                                    [minLength]="_GetAttribute(header.columnName, row, 'minLength', 'coerTextbox') || 0"
+                                                    [maxLength]="_GetAttribute(header.columnName, row, 'maxLength', 'coerTextbox') || 50"
+                                                    (onInput)="_InputChange(row.indexRow, header.columnName, $event, 'coer-textbox')"
+                                                    (onKeyupEnter)="_KeyupEnter(header.indexColumn, row, 'coer-textbox', $event)"
+                                                ></coer-textbox>
+                                            </td>
+                                        }
+    
+    
+                                        @else if(_IsCellType(header.columnName, row, 'coerNumberbox')) {
+                                            <!-- coer-numberbox -->
+                                            <td class="coer-numberbox">
+                                                <coer-numberbox
+                                                    [id]="_GetId(row.indexRow, header.indexColumn)"
+                                                    [(ngModel)]="row[header.columnName]"
+                                                    [isDisabled]="_GetAttribute(header.columnName, row, 'isDisabled', 'coerNumberbox') || _isDisabled() || _isLoading()"
+                                                    [isValid]="_GetAttribute(header.columnName, row, 'isValid', 'coerNumberbox') || false"
+                                                    [isInvalid]="_GetAttribute(header.columnName, row, 'isInvalid', 'coerNumberbox') || false"
+                                                    [selectOnFocus]="_GetAttribute(header.columnName, row, 'selectOnFocus', 'coerNumberbox') || true"
+                                                    [placeholder]="_GetAttribute(header.columnName, row, 'placeholder', 'coerNumberbox') || ''"
+                                                    [textPosition]="_GetAttribute(header.columnName, row, 'textPosition', 'coerNumberbox') || 'right'"
+                                                    [min]="_GetAttribute(header.columnName, row, 'min', 'coerNumberbox') || 0"
+                                                    [max]="_GetAttribute(header.columnName, row, 'max', 'coerNumberbox') || 2147483647"
+                                                    [decimals]="_GetAttribute(header.columnName, row, 'decimals', 'coerNumberbox') || 0"
+                                                    (onInput)="_InputChange(row.indexRow, header.columnName, $event, 'coer-numberbox')"
+                                                    (onKeyupEnter)="_KeyupEnter(header.indexColumn, row, 'coer-numberbox', $event)"
+                                                ></coer-numberbox>
+                                            </td>
+                                        }
+    
+    
+                                        @else if(_IsCellType(header.columnName, row, 'coerSelectbox')) {
+                                            <!-- coer-numberbox -->
+                                            <td class="coer-selectbox">
+                                                <coer-selectbox
+                                                    [id]="_GetId(row.indexRow, header.indexColumn)"
+                                                    [(ngModel)]="row[header.columnName]"
+                                                    [isDisabled]="_GetAttribute(header.columnName, row, 'isDisabled', 'coerSelectbox') || _isDisabled() || _isLoading()"
+                                                    [isValid]="_GetAttribute(header.columnName, row, 'isValid', 'coerSelectbox') || false"
+                                                    [isInvalid]="_GetAttribute(header.columnName, row, 'isInvalid', 'coerSelectbox') || false"
+                                                    [dataSource]="_GetAttribute(header.columnName, row, 'dataSource', 'coerSelectbox') || []"
+                                                    [placeholder]="_GetAttribute(header.columnName, row, 'placeholder', 'coerSelectbox') || '-- Select --'"
+                                                    [displayProperty]="_GetAttribute(header.columnName, row, 'displayProperty', 'coerSelectbox') || 'name'"
+                                                    (onSelected)="_InputChange(row.indexRow, header.columnName, $event, 'coer-selectbox'); _KeyupEnter(header.indexColumn, row, 'coer-selectbox', $event)"
+                                                ></coer-selectbox>
+                                            </td>
+                                        }
+    
+    
+                                        @else if(_IsCellType(header.columnName, row, 'coerSwitch')) {
+                                            <!-- coer-switch -->
+                                            <td>
+                                                <coer-switch
+                                                    [id]="_GetId(row.indexRow, header.indexColumn)"
+                                                    [(ngModel)]="row[header.columnName]"
+                                                    [isDisabled]="_GetAttribute(header.columnName, row, 'isDisabled', 'coerSwitch') || _isDisabled() || _isLoading()"
+                                                    [tooltip]="_GetAttribute(header.columnName, row, 'tooltip', 'coerSwitch')"
+                                                    [tooltipPosition]="_GetAttribute(header.columnName, row, 'tooltipPosition', 'coerSwitch') || 'left'"
+                                                    [isInvisible]="_isDisabled()"
+                                                    (onChange)="_InputChange(row.indexRow, header.columnName, $event, 'coer-switch')"
+                                                ></coer-switch>
+                                            </td>
+                                        }
+    
+                                        @else {
+                                            <!-- Default Cell -->
+                                            <td class="default-cell"
+                                                (click)="_ClickOnRow(row)"
+                                                (dblclick)="_isDisabled() ? null : onDoubleClickRow.emit(row)"
+                                                [ngStyle]="{
+                                                    'text-align': _GetAttribute(header.columnName, row, 'textAlign', 'defaul-cell'),
+                                                    'white-space': 'normal'
+                                                }">
+    
+                                                <div [id]="_GetId(row.indexRow, header.indexColumn)"
+                                                    [ngClass]="{
+                                                        'text-blue-bold': _IsCellColor(header.columnName, row, 'colorBlue'),
+                                                        'text-green-bold': _IsCellColor(header.columnName, row, 'colorGreen'),
+                                                        'text-yellow-bold': _IsCellColor(header.columnName, row, 'colorYellow'),
+                                                        'text-red-bold': _IsCellColor(header.columnName, row, 'colorRed'),
+                                                        'text-right-bold': _IsCellType(header.columnName, row, 'number')
+                                                    }">
+    
+                                                    @if(_IsCellType(header.columnName, row, 'number')) {
+                                                        <span> {{ GetNumericFormat(row[header.columnName]) }} </span>
+                                                    }
+    
+                                                    @else if(_IsCellType(header.columnName, row, 'date')) {
+                                                        <span> {{ _GetDateFormat(row[header.columnName], _IsCellType(header.columnName, row, 'toLocalZone')) }} </span>
+                                                    }
+    
+                                                    @else if(_IsCellType(header.columnName, row, 'date-time')) {
+                                                        <span> {{ _GetDateTimeFormat(row[header.columnName], _IsCellType(header.columnName, row, 'toLocalZone')) }} </span>
+                                                    }
+    
+                                                    @else {
+                                                        <span> {{ _GetCellValue(row, header.columnName) }} </span>
+                                                    }
+                                                </div>
+                                            </td>
+                                        }
+                                    }
+    
+                                    <!-- Delete Button -->
+                                    @if(_ButtonByRow('showDeleteButton')) {
+                                        <td class="action-button">
+                                            @if(_ButtonByRow('showDeleteButton', row)) {
+                                                <coer-button
+                                                    type="icon-no-border"
+                                                    [color]="_ColorButtonByRow('deleteButtonColor')"
+                                                    icon="delete"
+                                                    [tooltip]="_GetTooltip('Delete', row)"
+                                                    [isInvisible]="_isDisabled()"
+                                                    [isReadonly]="isReadonly()"
+                                                    [isDisabled]="_isLoading()"
+                                                    (onClick)="onClickDeleteRow.emit(row)"
+                                                ></coer-button>
+                                            }
+                                        </td>
+                                    }
+    
+                                    <!-- Edit Button -->
+                                    @if(_ButtonByRow('showEditButton')) {
+                                        <td class="action-button">
+                                            @if(_ButtonByRow('showEditButton', row)) {
+                                                <coer-button
+                                                    type="icon-no-border"
+                                                    [color]="_ColorButtonByRow('editButtonColor')"
+                                                    icon="edit"
+                                                    [tooltip]="_GetTooltip('Edit', row)"
+                                                    [isInvisible]="_isDisabled()"
+                                                    [isDisabled]="_isLoading()"
+                                                    (onClick)="onClickEditRow.emit(row)"
+                                                ></coer-button>
+                                            }
+                                        </td>
+                                    }
+    
+                                    <!-- GO Button -->
+                                    @if(_ButtonByRow('showGoButton')) {
+                                        <td class="action-button">
+                                            @if(_ButtonByRow('showGoButton', row)) {
+                                                <coer-button
+                                                    type="icon-no-border"
+                                                    [color]="_ColorButtonByRow('goButtonColor')"
+                                                    icon="go"
+                                                    [tooltip]="_GetTooltip('Go to', row, 'detail')"
+                                                    [isInvisible]="_isDisabled()"
+                                                    [isDisabled]="_isLoading()"
+                                                    (onClick)="onClickGoRow.emit(row)"
+                                                ></coer-button>
+                                            }
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            }
+
+            @else {
+                <!-- Grid Message -->
+                <div class="loading" [ngStyle]="{ 
+                        'width': '100%', 
+                        'height': '100%',
+                        'bottom': showFooter() ? '35px' : '10px'
+                    }">
+                    <i class="spinner-border"></i>
+                    <span class="fa-fade">Loading</span>
+                </div> 
+            }
+        </div>
+    </section>
+
+    @if(showFooter()) {
+        <footer class="grid-footer">
+            <span>
+                @if(_isLoadingMessage) {
+                    <span class="fa-fade"> Loading </span>
+                }
+
+                @else if(gridLength().dataSourceSelected > 0) {
+                    <span>
+                        <i class="bi bi-check2-square ms-1"></i>
+                        {{ gridLength().dataSourceSelected }}
+                    </span>
+                }
+            </span>
+
+            <span class="me-1"> {{ gridLength().dataSourceFiltered | numericFormat }} Rows </span>
+        </footer>
+    }
+</div>

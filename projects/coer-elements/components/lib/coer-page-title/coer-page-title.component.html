@@ -1,0 +1,42 @@
+<header class="coer-page-title" title=''>
+    <h2>
+        <span> {{ title() }} </span>
+
+        <!-- Button Information -->
+        @if(information().show) {
+            <coer-button
+                icon="bi bi-info-circle"
+                type="icon-no-border"
+                color="dark"
+                [tooltip]="_tooltip"
+                (onClick)="onClickInformation.emit()"
+            ></coer-button> 
+        }
+    </h2>
+
+    <!-- Navigation -->
+    <nav *ngIf="showBreadcrumbs" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a><i [class]="_icon"></i></a>
+            </li>
+
+            <li *ngFor="let nav of breadcrumbs()" class="breadcrumb-item">
+                <a  [routerLink]='(nav.path && nav.path.length > 0) ? nav.path : null'
+                    [queryParams]='nav.queryParams'
+                    (click)="(nav.click) ? nav.click() : null">
+                    {{ nav.page }}
+                </a>
+            </li>
+        </ol>
+
+        <!-- Go Back -->
+        <a  *ngIf="goBack().show"
+            [routerLink]="goBack().path"
+            [queryParams]='goBack().queryParams'
+            class="go-back-button"
+            (click)="(goBack().click) ? goBack().click!() : null">
+            Go back
+        </a>
+    </nav>
+</header> 

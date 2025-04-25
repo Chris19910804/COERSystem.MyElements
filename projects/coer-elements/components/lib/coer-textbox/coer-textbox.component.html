@@ -1,0 +1,91 @@
+<div class="coer-text-box">
+    @if(_showButtonLeft) {
+        <div class="button-container">
+            <coer-button
+                type="icon-no-border"
+                color="dark"
+                [icon]="_buttonIcon"  
+                [isDisabled]="_isDisabledExternalButton" 
+                (onClick)="_isEnable() ? onClickExternalButton.emit() : null"
+            ></coer-button>
+        </div>
+    }
+
+    <mat-form-field
+        [id]="_id + '-container'"
+        [floatLabel]="_floatLabel()"
+        [ngClass]="{
+            'readonly': isReadonly() && !isLoading(),
+            'd-none': isInvisible()
+        }"
+        [style]="{
+            'width': width(),
+            'min-width': minWidth(),
+            'max-width': maxWidth(),
+            'margin-top': marginTop(),
+            'margin-right': marginRight(),
+            'margin-bottom': marginBottom(),
+            'margin-left': marginLeft()
+        }">
+        <mat-label>{{ label() }}</mat-label>
+
+        <input #coerTextBox matInput
+            [id]="_id"
+            type="text"
+            [placeholder]="placeholder()"
+            [minLength]="minLength()"
+            [maxLength]="maxLength()"
+            [disabled]="!_isEnable()"
+            [value]="_value"
+            (input)="SetValue(coerTextBox.value)"
+            (blur)="SetTouched(true)"
+            [style]="{
+                'cursor': isLoading() ? 'wait' : null,
+                'margin-top': (_floatLabel() == 'auto') ? '15px' : '9px',
+                'padding-right': _paddingRight(),
+                'text-align': textPosition()
+            }">
+
+        @if(isLoading()) {
+            <div class="placeholder-glow">
+                <span class="placeholder"></span>
+            </div>
+        }
+
+        <span ngClass="icon-container">
+            @if(_showSearchIcon) {
+                <i class="fa-solid fa-magnifying-glass cursor-pointer" (click)="_ClickSearch()"></i>
+            }
+
+            @else if(_showClearIcon) {
+                <i class="fa-solid fa-xmark cursor-pointer" (click)="Clear(); this.onClickClear.emit();"></i>
+            }
+
+            @else if(isInvalid() && !isDisabled() && !isLoading()) {
+                <i class="fa-solid fa-circle-exclamation"></i>
+            }
+
+            @else if(isValid() && !isDisabled() && !isLoading()) {
+                <i class="fa-solid fa-circle-check text-green"></i>
+            }
+        </span>
+    </mat-form-field> 
+
+    @if(isInvisible()) {
+        <mat-form-field class="invisible">
+            <input matInput [disabled]="true"> 
+        </mat-form-field> 
+    }
+
+    @if(_showButtonRight) {
+        <div class="button-container">
+            <coer-button
+                type="icon-no-border"
+                color="dark"
+                [icon]="_buttonIcon"  
+                [isDisabled]="_isDisabledExternalButton" 
+                (onClick)="_isEnable() ? onClickExternalButton.emit() : null"
+            ></coer-button>
+        </div>
+    }
+</div>

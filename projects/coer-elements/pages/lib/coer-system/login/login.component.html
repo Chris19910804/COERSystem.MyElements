@@ -1,0 +1,89 @@
+<div class="login-container">
+
+    <!-- Title -->
+    <div class="title">
+        {{ _appName }}
+    </div>
+     
+    @if(_show === 'LOGIN') {
+        <section>
+            <!-- User -->
+            <coer-textbox
+                #inputUser
+                label="User"
+                [(ngModel)]="_user"
+                [isLoading]="_isLoading()" 
+                marginTop="35px"
+                marginBottom="35px"
+                [maxLength]="15"
+                (onKeyupEnter)="inputPassword.Focus(true)"
+            ></coer-textbox>
+             
+            <!-- Password -->
+            <coer-secretbox
+                #inputPassword
+                label="Password"
+                [(ngModel)]="_password"
+                [isLoading]="_isLoading()"
+                marginBottom="35px"
+                [maxLength]="20"
+                (onKeyupEnter)="__Login()"
+            ></coer-secretbox>   
+            
+            <!-- Login -->
+            <div class="text-center">
+                <coer-button
+                    color="dark" 
+                    [isDisabled]="!_enableButton"
+                    [isLoading]="_isLoading()"
+                    (onClick)="__Login()"
+                > Login </coer-button>
+            </div>
+        </section>
+
+
+        <!-- Recover password -->
+        <div class="recover" (click)="Show('RECOVERY')">
+            Recover password
+        </div>  
+    } 
+
+
+    @if(_show === 'RECOVERY') {
+        <section>
+            <!-- Recovery -->
+            <coer-textbox
+                #inputRecovery
+                label="User / Email"
+                [(ngModel)]="_user"
+                [isLoading]="_isLoading()" 
+                marginTop="35px"
+                marginBottom="35px"
+                [maxLength]="50"
+                (onKeyupEnter)="__Recovery()"
+            ></coer-textbox> 
+
+
+            <!--  -->
+            <coer-textbox [isInvisible]="true"></coer-textbox>   
+
+            
+            <!-- Login -->
+            <div class="text-center">
+                <coer-button 
+                    color="dark" 
+                    [isDisabled]="!_enableRecoveryButton"
+                    [isLoading]="_isLoading()"
+                    marginTop="35px"
+                    (onClick)="__Recovery()"
+                > Recovery </coer-button>
+            </div>
+        </section>
+
+        <!-- Recover password -->
+        <div class="back" (click)="Show('LOGIN')">
+            Back
+        </div>
+    } 
+</div>
+

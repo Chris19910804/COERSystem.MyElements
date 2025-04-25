@@ -1,0 +1,11 @@
+.property-container { 
+    min-width: 200px !important;
+    max-width: 200px !important;
+    margin-bottom: 10px;
+
+    .property-name {
+        display: flex;
+        min-width: 200px !important;
+        max-width: 200px !important;
+    }
+}

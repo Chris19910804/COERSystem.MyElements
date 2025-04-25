@@ -1,0 +1,86 @@
+<mat-drawer-container [hasBackdrop]="backdrop">
+    <mat-drawer
+        #matSidenav
+        [opened]="isOpen()"
+        (opened)="isOpen.set(true)"
+        (closed)="isOpen.set(false)"
+        [mode]="mode"
+        [class]="_isModalOpen() ? 'z-index-1' : 'z-index-3'">
+
+        @if(!_isLoading()) {
+            @if(_navigation().length > 0) {
+                <div *ngFor="let item of _navigation()">
+                    <!-- Menu -->
+                    <div *ngIf="_IsMenu(item); else OptionMenu">
+                        @if(_IsGrid(item)) {
+                            <coer-menu-option
+                                [label]="item.label"
+                                [icon]="_GetIcon(item)"
+                                path="menu"
+                                (clickMenuOption)="ShowGridMenu($event, item)"
+                            ></coer-menu-option>
+                        }
+
+                        @else {
+                            <coer-tree-accordion
+                                [item]="item"
+                                (showGridMenu)="NavigateTo($event, true)"
+                                (clickMenuOption)="NavigateTo($event, false)"
+                                (clickMenu)="MenuSelected($event)"
+                            ></coer-tree-accordion>
+                        }
+                    </div>
+        
+                    <!-- Option Menu -->
+                    <ng-template #OptionMenu>
+                        <coer-menu-option
+                            [label]="item.label"
+                            [icon]="item?.icon"
+                            [path]="item?.path"
+                            (clickMenuOption)="NavigateTo($event)"
+                        ></coer-menu-option>
+                    </ng-template>
+        
+                    <div class="separator"></div>
+                </div>
+            }
+
+            @else {
+                <coer-menu-option label="Empty"></coer-menu-option>
+            }
+        }
+
+        @else {
+            <coer-menu-option
+                label="LOADING"
+                icon="fa-solid fa-sync fa-spin"
+            ></coer-menu-option>
+        }
+
+        <div [ngClass]="{ 'backdrop': _isModalOpen() }"></div>
+    </mat-drawer>
+
+    <!-- Main Screen -->
+    <mat-drawer-content [ngClass]="{ 'margin-left-40px': (!isOpen() && showAsideMenu) }">
+        <aside [ngClass]="{ 'side-nav': true, 'd-none': !showAsideMenu }" (click)="Open($event)">
+            @if(_isLoading()) {
+                <span class="icon-container">
+                    <i class="fa-solid fa-sync fa-spin"></i>
+                </span>
+            }
+
+            @else {
+                @for (item of _navigation(); track item.id) {
+                    <div (click)="Open($event, item)">
+                        <span [class]="'icon-container ' + SetIdentityClass(item.label)">
+                            <i [class]="_GetIcon(item)"></i>
+                        </span>
+                    </div>
+                } 
+            }
+
+            <div [ngClass]="{ 'backdrop': _isModalOpen() }"></div>
+        </aside> 
+        <ng-content></ng-content>
+    </mat-drawer-content>
+</mat-drawer-container>

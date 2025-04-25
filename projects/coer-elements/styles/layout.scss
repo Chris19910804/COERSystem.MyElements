@@ -1,0 +1,40 @@
+@each $key, $value in ('top': top, 'middle': center, 'bottom': bottom) {
+    .flex-#{$key}-left {
+        display: flex !important;
+        align-items: $value !important;
+        justify-content: flex-start !important;
+    } 
+
+    .flex-#{$key}-center {
+        display: flex !important;
+        align-items: $value !important;
+        justify-content: center !important;
+    } 
+
+    .flex-#{$key}-right {
+        display: flex !important;
+        align-items: $value !important;
+        justify-content: flex-end !important;
+    } 
+}
+
+
+@each $key, $value in ('left': flex-start, 'center': center, 'right': flex-end) {
+    .flex-wrap-#{$key} { 
+        display: flex !important; 
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        align-items: $value !important;
+    }
+} 
+
+
+.flex-wrap-item {
+    flex-grow: 1 !important;
+    flex-basis: 200 !important;
+}
+
+
+.fill-space {
+    flex: 1 1 auto;
+}

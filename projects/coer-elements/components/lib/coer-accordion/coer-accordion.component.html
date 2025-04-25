@@ -1,0 +1,23 @@
+<mat-expansion-panel
+    [id]="_id" 
+    #coerAccordion 
+    title="" 
+    class="coer-accordion"
+    [disabled]="_isDisabled" 
+    [expanded]="expanded()" 
+    (opened)="Open()" 
+    (closed)="Close()">
+    
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            @if(_IsNotOnlyWhiteSpace(icon())) {
+                <i [class]="icon()"></i>
+            }
+            <span>{{ title() }}</span>
+        </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div [ngClass]="{ 'd-none': isCollapsed }">
+        <ng-content></ng-content>
+    </div>
+</mat-expansion-panel>

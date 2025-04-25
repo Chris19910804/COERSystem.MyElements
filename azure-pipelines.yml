@@ -1,0 +1,40 @@
+trigger:
+- Release/MyElements-Library 
+
+stages:
+- stage: 'MyElements_Library'
+  displayName: 'MyElements Library'
+  jobs:
+    - job: 'launch'
+      displayName: 'Deploying Library'
+      pool:
+        vmImage: 'windows-latest'
+
+      steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: '22.14.0'
+          displayName: 'Node 22.14.0'
+
+        - script: |
+            npm install
+          displayName: 'Installing'
+
+        - script: | 
+            npm run build:lib
+          timeoutInMinutes: '5'
+          displayName: 'Building Lib'
+
+        - task: npmAuthenticate@0
+          inputs:
+            workingFile: 'dist/coer-elements/.npmrc'
+          displayName: 'Artefacts Auth'
+
+        - script: |
+            cd dist/coer-elements
+            npm publish 
+          displayName: 'Publishing'
+
+        - task: PublishBuildArtifacts@1
+          displayName: 'Published'
+          condition: succeeded()

@@ -1,0 +1,36 @@
+.login-container {
+    position: relative;
+    border: 1px solid black;
+    border-radius: 25px;
+    min-width: 400px;
+    max-width: 400px;
+    margin: auto;
+    padding: 35px;
+    margin-top: 35px;
+
+    .title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 25px;
+        font-weight: bold;
+        color: var(--primary-inner);
+    }
+
+    .back,
+    .recover,
+    .remember {
+        position: absolute;  
+        left: 20px;
+        bottom: -25px;
+        font-size: small;
+        font-weight: bold;
+        color: var(--secondary-inner);
+        cursor: pointer;
+    }
+
+    .back:hover,
+    .recover:hover {
+        transform: scale(1.01);
+    }
+} 

@@ -1,0 +1,24 @@
+@if(information().length > 0) {
+    <section class="coer-container-accordion">
+        <coer-accordion #accordion [title]="type()" [expanded]="false" (onOpen)="_OpenAccordion()">  
+            @for(item of _information(); track item.name) {
+                <section class="information">
+                    @if (IsNotNull(item)) {
+                        <h5>         
+                            <span> {{ item.name }} </span>
+
+                            <span>
+                                @if(IsNotOnlyWhiteSpace(item.response)) {
+                                    <span> {{ _response() }}: </span>
+                                    <span class="text-red"> {{ item.response }} </span>
+                                }
+                            </span>
+                        </h5>
+
+                        <documentation-options [options]="item.options"></documentation-options>
+                    }
+                </section> 
+            }
+        </coer-accordion> 
+    </section> 
+}

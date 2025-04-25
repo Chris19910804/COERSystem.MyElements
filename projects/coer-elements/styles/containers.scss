@@ -1,0 +1,53 @@
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@mixin Container() {
+    margin: 15px 30px 0px 30px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px -10px black;
+    border-radius: 8px;
+    background-color: var(--containers-inner);
+    animation-name: fadeIn;
+    animation-duration: 1.5s;
+    animation-iteration-count: 1;
+    min-height: 60px;
+}
+
+.coer-container:not(.row) {
+    @include Container();
+} 
+
+.coer-container.row {
+    margin: 15px 30px 0px 30px;
+    justify-content: space-between;
+
+    .coer-container {
+        margin: 0px;
+    }
+} 
+
+.coer-container-accordion:not(.row) {
+    @include Container();
+    min-height: 55px;
+}
+
+.coer-container-tab:not(.row) {
+    @include Container();
+    padding: 0px;
+
+    .row {
+        margin: 12px 0px;
+    }
+}
+
+.coer-container-grid:not(.row) {
+    @include Container();
+    padding-bottom: 5px;
+}
+
+.coer-container-list:not(.row) {
+    @include Container();
+    padding: 0px;
+}  

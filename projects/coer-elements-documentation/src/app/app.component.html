@@ -1,0 +1,16 @@
+<coer-system 
+    #COERSystem 
+    [user]="user" 
+    [userImage]="userImage" 
+    [userRoles]="userRoles" 
+    [navigation]="navigation"
+    [toolbarMenu]="toolbarMenu"
+    (onLogin)="LogIn($event)"
+    (onRecoveryPassword)="RecoveryPassword($event)"
+    (onResetPassword)="ResetPassword($event)"
+    (onUploadUserImage)="UploadUserImage($event)"
+    (onDeleteUserImage)="DeleteUserImage()"
+    (onUpdateProfile)="UpdateProfile($event)"
+    (onUpdateJWT)="UpdateJWT()">
+    <router-outlet></router-outlet> 
+</coer-system>  
